@@ -1,30 +1,30 @@
-var cityGrowths = [
+var top15Cities = [
   {
     "Rank": 1,
     "City": "San Antonio ",
     "State": "Texas",
-    "Increase_from_2016": "39208",
+    "Increase_from_2016": "24208",
     "population": "1511946"
   },
   {
     "Rank": 2,
     "City": "Phoenix ",
     "State": "Arizona",
-    "Increase_from_2016": "34036",
+    "Increase_from_2016": "24036",
     "population": "1626078"
   },
   {
     "Rank": 3,
     "City": "Dallas",
     "State": "Texas",
-    "Increase_from_2016": "23935",
+    "Increase_from_2016": "18935",
     "population": "1341075"
   },
   {
     "Rank": 4,
     "City": "Fort Worth",
     "State": "Texas",
-    "Increase_from_2016": "20664",
+    "Increase_from_2016": "18664",
     "population": "874168"
   },
   {
@@ -105,14 +105,3 @@ var cityGrowths = [
     "population": "302539"
   }
  ]
-
- var sortedCities = cityGrowths.sort((a,b) => a.Increase_from_2016-b.Increase_from_2016).reverse();
- console.log(sortedCities);
-
- var topFivecities = sortedCities.slice(0,5);
- console.log(topFivecities);
-
- var topFiveCityNames = cityGrowths.map(city => city.City);
- var topFiveCityGrowth = cityGrowths.map(city => parseInt(city.Increase_from_2016));
-
- console.log(topFiveCityGrowth);
