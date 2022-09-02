@@ -1,10 +1,10 @@
 function init() {
   // Grab a reference to the dropdown select element
-  let selector = d3.select("#selDataset");
+  var selector = d3.select("#selDataset");
 
   // Use the list of sample names to populate the select options
   d3.json("samples.json").then((data) => {
-    let sampleNames = data.names;
+    var sampleNames = data.names;
 
     sampleNames.forEach((sample) => {
       selector
@@ -14,7 +14,7 @@ function init() {
     });
 
     // Use the first sample from the list to build the initial plots
-    let firstSample = sampleNames[0];
+    var firstSample = sampleNames[0];
     buildCharts(firstSample);
     buildMetadata(firstSample);
   });
@@ -33,12 +33,12 @@ function optionChanged(newSample) {
 // Demographics Panel 
 function buildMetadata(sample) {
   d3.json("samples.json").then((data) => {
-    let metadata = data.metadata;
+    var metadata = data.metadata;
     // Filter the data for the object with the desired sample number
-    let resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
+    var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
     var result = resultArray[0];
     // Use d3 to select the panel with id of `#sample-metadata`
-    let PANEL = d3.select("#sample-metadata");
+    var PANEL = d3.select("#sample-metadata");
 
     // Use `.html("") to clear any existing metadata
     PANEL.html("");
@@ -58,31 +58,35 @@ function buildCharts(sample) {
   // 2. Use d3.json to load and retrieve the samples.json file 
   d3.json("samples.json").then((data) => {
     // 3. Create a variable that holds the samples array. 
-    let samples = data.samples;
+    var samples = data.samples;
     // 4. Create a variable that filters the samples for the object with the desired sample number.
-    let resultArray = samples.filter(sampleObj => sampleObj.id == sample);
+    var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
+    var metadata = data.metadata;
+    var metadataArray = metadata.filter(sampleObj => sampleObj.id == sample);
+
     //  5. Create a variable that holds the first sample in the array.
-    let result = resultArray[0];
+    var result = resultArray[0];
 
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
-    let PANEL = d3.select("#sample-metadata");
-    let otu_ids = result.otu_ids;
-    let otu_labels = result.otu_labels;
-    let sample_values = result.sample_values;
+    var PANEL = d3.select("#sample-metadata");
+    var otu_ids = result.otu_ids;
+    var otu_labels = result.otu_labels;
+    var sample_values = result.sample_values;
 
+    var washing_frequency = metadata.wfreq;
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
 
-    let yticks = otu_ids.slice(0,10).map(otuID => 'OTU ${otuID}').reverse();
+    var yticks = otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse();
 
     // 8. Create the trace for the bar chart. 
     var barData = [
         {
             y: yticks,
-            x: sample_values.slice(0,10).reverse(),
-            text: otu_labels.slice(0,10).reverse(),
-            type: 'bar',
+            x: sample_values.slice(0, 10).reverse(),
+            text: otu_labels.slice(0, 10).reverse(),
+            type: "bar",
             orientation: "h",
         }
       
@@ -91,15 +95,15 @@ function buildCharts(sample) {
     var barLayout = {
      width: 500, height: 500,
      title: "Top 10 Bacterial Cultures",
-     margin: {t: 30, l: 150}
+     margin: { t: 30, l: 150 }
     };
     // 10. Use Plotly to plot the data with the layout. 
-    Plotly.newplot("bar", barData, barLayout);
+    Plotly.newPlot("bar", barData, barLayout);
 
     // Bar and Bubble charts
   
       // 1. Create the trace for the bubble chart.
-      let bubbleData = [
+      var bubbleData = [
         {
             x: otu_ids,
             y: sample_values,
@@ -115,12 +119,12 @@ function buildCharts(sample) {
       ];
   
       // 2. Create the layout for the bubble chart.
-      let bubbleLayout = {
+      var bubbleLayout = {
         title: "Bacterial Culture Per Sample",
-        margin: {t:0},
+        margin: { t: 0 },
         hovermode: "closest",
-        xaxis: {title: "OTU ID"},
-        margin: {t:30}
+        xaxis: { title: "OTU ID"},
+        margin: { t: 30}
         
       };
   
@@ -129,35 +133,33 @@ function buildCharts(sample) {
       
       
       // 4. Create the trace for the gauge chart.
-    let gaugeData = [
+    
+    var gaugeData = [
         {
-            domain: {x: [0,1], y: [0,1]},
+            domain: { x: [0, 1], y: [0, 1]},
             value: washing_frequency,
             type: "indicator",
             mode: "gauge+number",
-            title: {text: "<b> Belly Button Washing Frequency</b> <br> # of Scrubs per Week</br>"},
+            title: {text: "<b> Belly Button Washing Frequency</b> <br> # of Scrubs per Week" },
             guage: {
-                axis: {range: [null, 0], tickwidth: 2, tickcolor: "black"},
-                bar: {color: "black"},
+                axis: {range: [null, 10], tickwidth: 2, tickcolor: "black" },
+                bar: { color: "black" },
                 steps: [
-                    {range: [0,2], color: "firebrick"},
-                    {range: [2,4], color: "darkorange"},
-                    {range: [4,6], color: "greenyellow"},
-                    {range: [6,8], color: "lightseagreen"},
-                    {range: [8,10], color: "dodgerblue"}
-
+                    {range: [0, 2], color: "firebrick"},
+                    {range: [2, 4], color: "darkorange"},
+                    {range: [4, 6], color: "greenyellow"},
+                    {range: [6, 8], color: "lightseagreen"},
+                    {range: [8, 10], color: "dodgerblue"}
                 ],
                 threshold: {
                     value: washing_frequency,
                 }
             },
-        }
-     
-    ];
+        }];
     
     // 5. Create the layout for the gauge chart.
-    let gaugeLayout = { 
-     width: 600, height: 500, margin: {t:0, b:0},
+    var gaugeLayout = { 
+     width: 600, height: 500, margin: { t: 0, b: 0 },
      font: {color: "black"}
     };
 
