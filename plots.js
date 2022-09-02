@@ -66,14 +66,14 @@ function buildCharts(sample) {
 
     //  5. Create a variable that holds the first sample in the array.
     var result = resultArray[0];
-
+    var metaresults = metadataArray[0];
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var PANEL = d3.select("#sample-metadata");
     var otu_ids = result.otu_ids;
     var otu_labels = result.otu_labels;
     var sample_values = result.sample_values;
 
-    var washing_frequency = metadata.wfreq;
+    var washing_frequency = metaresults.wfreq;
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
@@ -136,7 +136,7 @@ function buildCharts(sample) {
     
     var gaugeData = [
         {
-            domain: { x: [0, 1], y: [0, 1]},
+            domain: { x: [0, 1], y: [0, 1] },
             value: washing_frequency,
             type: "indicator",
             mode: "gauge+number",
